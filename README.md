@@ -1,2 +1,2 @@
 # swiftpoll-platform
-SwiftPoll - A multi Tenant Voting Platform
+SwiftPoll - A multi Tenant Voting Platform.
