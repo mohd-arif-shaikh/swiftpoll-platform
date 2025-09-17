@@ -46,6 +46,61 @@ SwiftPoll follows a **decoupled, event-driven microservices architecture** with 
                        └─────────────┘
 ```
 
+## System Flow Digram
+
+```mermaid
+graph TD
+    Voter["Voter (Web/Mobile)"] -->|Vote Request| API["API Gateway"]
+    API -->|Validate JWT| Identity["Identity Service"]
+    API -->|Validate Poll & Option| Poll["Poll Service"]
+    API -->|Forward Vote| Vote["Vote Service"]
+
+    Vote -->|Deduplicate & Mark| Redis["Redis Cache"]
+    Vote -->|Publish vote_cast| Kafka["Kafka Topics"]
+
+    Kafka --> Result["Result Service"]
+    Kafka --> Sentinel["Sentinel Service"]
+
+    Result -->|Update Counts| Redis
+    Result -->|Push Live Results| Voter
+    Sentinel -->|Publish fraud_alert| Kafka
+
+```
+## Sequence Digram 
+
+```mermaid
+sequenceDiagram
+    participant Voter as Voter (Web/Mobile)
+    participant API as API Gateway
+    participant Identity as Identity Service
+    participant Poll as Poll Service
+    participant Vote as Vote Service
+    participant Redis as Redis Cache
+    participant Kafka as Kafka Topics
+    participant Result as Result Service
+    participant Sentinel as Sentinel Service
+
+    Voter->>API: Cast Vote (JWT, pollId, optionId)
+    API->>Identity: Validate JWT
+    Identity-->>API: JWT Valid / Invalid
+    API->>Poll: Validate Poll & Option
+    Poll-->>API: Poll Active? Option Valid?
+    API->>Vote: Forward Vote
+    Vote->>Redis: Check user:poll deduplication
+    Redis-->>Vote: Already Voted? No
+    Vote->>Redis: Mark vote (TTL = poll duration)
+    Vote->>Kafka: Publish vote_cast event
+    Kafka-->>Result: Consume vote_cast
+    Kafka-->>Sentinel: Consume vote_cast
+    Result->>Redis: Increment poll:option count
+    Result->>Voter: Push updated count via WebSocket
+    Sentinel->>Kafka: Publish fraud_alert (if triggered)
+
+
+```
+
+
+
 ## 📦 Microservices Repository Structure
 
 ### Infrastructure Services
