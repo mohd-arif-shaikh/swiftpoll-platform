@@ -23,30 +23,7 @@ Existing polling solutions crash during traffic spikes, lose critical voting dat
 - **Uptime:** 99.95% during live events
 - **Fraud Detection:** Real-time pattern analysis
 
-## 🏗️ System Architecture
-
-SwiftPoll follows a **decoupled, event-driven microservices architecture** with defense-in-depth security and cloud-native principles.
-
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────────┐
-│   Frontend      │───▶│   API Gateway    │───▶│  Microservices      │
-│   (React)       │    │  (JWT Validation)│    │   Ecosystem         │
-└─────────────────┘    └──────────────────┘    └─────────────────────┘
-                              │                           │
-                              ▼                           ▼
-                       ┌─────────────┐              ┌──────────────┐
-                       │   Apache    │◀─────────────│   Results    │
-                       │   Kafka     │              │  WebSocket   │
-                       └─────────────┘              └──────────────┘
-                              │
-                              ▼
-                       ┌─────────────┐
-                       │Anti-Fraud   │
-                       │ Detection   │
-                       └─────────────┘
-```
-
-## System Flow Digram
+## 🏗️ System Flow Digram
 
 ```mermaid
 graph TD
@@ -66,7 +43,7 @@ graph TD
     Sentinel -->|Publish fraud_alert| Kafka
 
 ```
-## Sequence Digram 
+## 🏗️ Sequence Digram 
 
 ```mermaid
 sequenceDiagram
