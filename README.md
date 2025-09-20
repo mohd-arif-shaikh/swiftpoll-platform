@@ -83,7 +83,7 @@ sequenceDiagram
 ### Infrastructure Services
 | Service | Repository | Description | Tech Stack |
 |---------|------------|-------------|------------|
-| **Config Server** | [🔗 swiftpoll-config-server](https://github.com/mohd-arif-shaikh/config-server) | Centralized configuration management | Spring Cloud Config |
+| **Config Server** | [🔗 config-server](https://github.com/mohd-arif-shaikh/config-server) | Centralized configuration management | Spring Cloud Config |
 
 ### Core Application Services
 | Service | Repository | Description | Tech Stack |
